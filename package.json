@@ -1,7 +1,7 @@
 {
-  "name": "painfloor-client",
+  "name": "react-redux-threejs-example",
   "version": "1.0.0",
-  "description": "PainFloor client",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --watch-poll --hot --inline --progress --colors --port 3000",
@@ -30,8 +30,6 @@
     "three": "^0.75.0",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
-  },
-  "dependencies": {
     "react-redux": "^4.4.1"
-  }
+  },
 }
