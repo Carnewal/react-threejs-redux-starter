@@ -3,7 +3,7 @@ var path = require('path')
 
 module.exports = {
   context: path.join(__dirname, './app'),
-  entry: {	
+  entry: {
     //jsx: './index.js',
     js: './index.js',
     html: './index.html',
@@ -33,7 +33,7 @@ module.exports = {
           'babel-loader'
         ]
       },
-	  
+
     ],
   },
   resolve: {

@@ -11,12 +11,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react": "^0.14.7",
-    "react-dom": "^0.14.7",
+    "cannon": "^0.6.2",
+    "file-loader": "^0.9.0",
+    "immutable": "^3.8.1",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
     "react-redux": "^4.4.1",
-    "react-three-renderer": "^0.1.2",
+    "react-three-renderer": "^2.2.1",
     "redux": "^3.3.1",
-    "three": "^0.75.0"
+    "redux-saga": "^0.11.0",
+    "three": "^0.79.0"
   },
   "devDependencies": {
     "babel-core": "^6.3.26",
@@ -27,9 +31,6 @@
     "babel-preset-stage-0": "^6.3.13",
     "babel-register": "^6.5.2",
     "babel-runtime": "^6.3.19",
-    "file-loader": "^0.8.4",
-    "install": "^0.6.0",
-    "npm": "^3.8.2",
     "path": "^0.12.7",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"

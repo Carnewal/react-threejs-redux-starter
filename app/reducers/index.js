@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
-import cube from './cube'
-import camera from './camera'
+
+import world from './world'
+import controllers from './controllers'
 
 export default combineReducers({
-  cube,
-  camera
+  world,
+  controllers
+  //camera
 })
