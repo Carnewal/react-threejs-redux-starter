@@ -92,6 +92,8 @@ const getCameras = (width, height) => ([
  }
 ])
 
+const fog = new THREE.Fog(0x001525, 10, 40)
+
 const mapStateToProps = (state) => {
 
 	/*const viewportDivider = players && players.length === 1
@@ -104,7 +106,8 @@ const mapStateToProps = (state) => {
 		width: innerWidth,
 		height: innerHeight,
 		viewports: getViewPorts(innerWidth, innerHeight),
-		cameras: getCameras(innerWidth, innerHeight)
+		cameras: getCameras(innerWidth, innerHeight),
+		fog: fog
 		//bodies: Object.keys(state.world.bodies).map((k) => state.world.bodies[k]),
 		//players: getPlayers(state),
 	}

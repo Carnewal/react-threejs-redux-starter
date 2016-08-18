@@ -17,8 +17,6 @@ class PhysicsMousePick extends React.Component {
 
     this._raycaster = new THREE.Raycaster()
 
-    this.fog = new THREE.Fog(0x001525, 10, 40)
-
     const d = 20
 
     this.lightPosition = new THREE.Vector3(d, d, d)
@@ -144,7 +142,8 @@ class PhysicsMousePick extends React.Component {
       width,
       height,
       viewports,
-      cameras
+      cameras,
+      fog
     } = this.props
 
     const {
@@ -176,7 +175,7 @@ class PhysicsMousePick extends React.Component {
 
         onAnimate={this._onAnimate}
 
-        clearColor={this.fog.color}
+        clearColor={fog.color}
 
 
       >
@@ -202,7 +201,7 @@ class PhysicsMousePick extends React.Component {
         </resources>
         <scene
           ref="scene"
-          fog={this.fog}
+          fog={fog}
         >
         {cameras.map((c) => <perspectiveCamera {...c} />)}
 
