@@ -4,6 +4,7 @@ import THREE from 'three'
 import CANNON from 'cannon'
 
 import PickableMesh from './mesh/PickableMesh'
+import Ground from './mesh/Ground'
 
 const backVector = new THREE.Vector3(0, 0, -1)
 const dragPlane = new THREE.Plane()
@@ -24,9 +25,7 @@ class PhysicsMousePick extends React.Component {
     this.lightTarget = new THREE.Vector3(0, 0, 0)
     this.groundQuaternion = new THREE.Quaternion()
       .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2)
-    this.cameraPosition = new THREE.Vector3(10, 2, 0)
-    this.cameraQuaternion = new THREE.Quaternion()
-      .setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
+
 
     const world = new CANNON.World()
 
@@ -228,22 +227,9 @@ class PhysicsMousePick extends React.Component {
             position={this.lightPosition}
             lookAt={this.lightTarget}
           />
-          <mesh
-            castShadow
-            receiveShadow
 
-            quaternion={this.groundQuaternion}
-          >
-            <planeBufferGeometry
-              width={100}
-              height={100}
-              widthSegments={1}
-              heightSegments={1}
-            />
-            <meshLambertMaterial
-              color={0x777777}
-            />
-          </mesh>
+          <Ground />
+
           {cubeMeshes}
           <mesh // click marker
             visible={clickMarkerVisible}

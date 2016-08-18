@@ -60,7 +60,7 @@ const getViewPorts = (width, height) => {
 			x: 0,
 			y: 0,
 			width: ((width / 2) - 1),
-			height: (height / 2),
+			height: height,
 			cameraName: 'camera1'
 		},
 		{
@@ -68,25 +68,27 @@ const getViewPorts = (width, height) => {
 			x: (width / 2),
 			y: 0,
 			width: ((width / 2) - 1),
-			height: (height / 2),
+			height: height,
 			cameraName: 'camera1'
 		}
 	]
 }
 
-const cameraPosition = new THREE.Vector3(10, 2, 0)
-const cameraQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
+const cameraPosition = new THREE.Vector3(14, 3, 0)
+const zeroPos = new THREE.Vector3(0, 2, 0)
+// const cameraQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
 
 const getCameras = (width, height) => ([
  {
 	 name: 'camera1',
-		ref: 'camera1',
-		fov: 60,
-		aspect: (width/height),
-		near: 0.5,
-		far: 10000,
-		position: cameraPosition,
-		quaternion: cameraQuaternion
+	 ref: 'camera1',
+	 key: 'camera1',
+	 fov: 40,
+	 aspect: (width/height),
+	 near: 0.5,
+	 far: 10000,
+	 position: cameraPosition,
+	 lookAt: zeroPos
  }
 ])
 
