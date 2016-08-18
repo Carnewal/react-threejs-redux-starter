@@ -27,6 +27,7 @@ const timeStep = 1/60
 	}
 } */
 
+/*
 
 const getPlayers = (state) => {
 
@@ -50,17 +51,41 @@ const getPlayers = (state) => {
 	})
 
 }
+*/
+
+const getViewPorts = (width, height) => {
+	return [
+		{
+			key: 'vp1',
+			x: 0,
+			y: 0,
+			width: ((width / 2) - 1),
+			height: (height / 2),
+			cameraName: 'camera1'
+		},
+		{
+			key: 'vp2',
+			x: (width / 2),
+			y: 0,
+			width: ((width / 2) - 1),
+			height: (height / 2),
+			cameraName: 'camera1'
+		}
+	]
+}
 
 const mapStateToProps = (state) => {
 
 	/*const viewportDivider = players && players.length === 1
     ? 1
     : (2 + Math.floor(players.length / 9));*/
+	const {innerWidth, innerHeight} = window
+
 
 	return {
-		width: window.innerWidth,
-		height: window.innerHeight,
-		world: state.world.cannonWorld,
+		width: innerWidth,
+		height: innerHeight,
+		viewports: getViewPorts(innerWidth, innerHeight)
 		//bodies: Object.keys(state.world.bodies).map((k) => state.world.bodies[k]),
 		//players: getPlayers(state),
 	}

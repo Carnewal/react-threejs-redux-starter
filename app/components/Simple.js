@@ -144,12 +144,12 @@ class PhysicsMousePick extends React.Component {
     const {
       width,
       height,
+      viewports
     } = this.props
 
     const {
       clickMarkerVisible,
       clickMarkerPosition,
-
       meshStates,
     } = this.state
 
@@ -180,22 +180,8 @@ class PhysicsMousePick extends React.Component {
 
 
       >
+        {viewports.map((vp) => <viewport {...vp} />)}
 
-        <viewport
-          key={'vp1'}
-          x={0}
-          y={0}
-          width={width/2 - 1}
-          height={height}
-          cameraName={'camera1'}/>
-
-        <viewport
-          key={'vp2'}
-          x={width/2}
-          y={0}
-          width={width/2 + 1}
-          height={height}
-          cameraName={'camera1'}/>
 
         <resources>
           <boxGeometry
