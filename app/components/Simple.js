@@ -231,20 +231,6 @@ class PhysicsMousePick extends React.Component {
           <Ground />
 
           {cubeMeshes}
-          <mesh // click marker
-            visible={clickMarkerVisible}
-
-            position={clickMarkerPosition}
-          >
-            <sphereGeometry
-              radius={0.2}
-              widthSegments={8}
-              heightSegments={8}
-            />
-            <meshLambertMaterial
-              color={0x772211}
-            />
-          </mesh>
         </scene>
 
       </React3>
