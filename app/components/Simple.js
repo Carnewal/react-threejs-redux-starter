@@ -144,7 +144,8 @@ class PhysicsMousePick extends React.Component {
     const {
       width,
       height,
-      viewports
+      viewports,
+      cameras
     } = this.props
 
     const {
@@ -204,21 +205,9 @@ class PhysicsMousePick extends React.Component {
           ref="scene"
           fog={this.fog}
         >
-          <perspectiveCamera
-            name="camera1"
-            fov={60}
-            aspect={width / height}
-            near={0.5}
-            far={10000}
+        {cameras.map((c) => <perspectiveCamera {...c} />)}
 
-            position={this.cameraPosition}
-            quaternion={this.cameraQuaternion}
-
-            ref="camera1"
-          />
-          <ambientLight
-            color={0x666666}
-          />
+          <ambientLight color={0x666666} />
           <directionalLight
             color={0xffffff}
             intensity={1.75}

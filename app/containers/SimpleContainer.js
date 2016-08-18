@@ -74,6 +74,22 @@ const getViewPorts = (width, height) => {
 	]
 }
 
+const cameraPosition = new THREE.Vector3(10, 2, 0)
+const cameraQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
+
+const getCameras = (width, height) => ([
+ {
+	 name: 'camera1',
+		ref: 'camera1',
+		fov: 60,
+		aspect: (width/height),
+		near: 0.5,
+		far: 10000,
+		position: cameraPosition,
+		quaternion: cameraQuaternion
+ }
+])
+
 const mapStateToProps = (state) => {
 
 	/*const viewportDivider = players && players.length === 1
@@ -85,7 +101,8 @@ const mapStateToProps = (state) => {
 	return {
 		width: innerWidth,
 		height: innerHeight,
-		viewports: getViewPorts(innerWidth, innerHeight)
+		viewports: getViewPorts(innerWidth, innerHeight),
+		cameras: getCameras(innerWidth, innerHeight)
 		//bodies: Object.keys(state.world.bodies).map((k) => state.world.bodies[k]),
 		//players: getPlayers(state),
 	}
