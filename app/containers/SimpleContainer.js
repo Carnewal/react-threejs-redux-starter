@@ -6,7 +6,6 @@ import THREE from 'three'
 import { ctrlConnected, ctrlDisconnected } from '../actions/controller'
 import { onAnimate } from '../actions/world'
 
-const timeStep = 1/60
 
 
 /* const calculateViews = (views) => {
@@ -69,31 +68,45 @@ const getViewPorts = (width, height) => {
 			y: (height / 2),
 			width: width,
 			height: (height / 2),
-			cameraName: 'camera1'
+			cameraName: 'camera2'
 		}
 	]
 }
 
-const cameraPosition = new THREE.Vector3(0, -20, 7)
+const cameraPosition = new THREE.Vector3(0, -50, 15)
 const cameraRotation = new THREE.Euler(0,0,Math.PI / 90)
 const zeroPos = new THREE.Vector3(0, 0, Math.PI / 90, 0)
 // const cameraQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
 
-const getCameras = (width, height) => ([
+const relativeCameraOffset = new THREE.Vector3(5,0,10)
+
+const getCameras = (width, height, carBodies) => ([
  {
 	 name: 'camera1',
 	 ref: 'camera1',
 	 key: 'camera1',
 	 fov: 40,
 	 aspect: (width/height),
-	 near: 0.5,
-	 far: 20000,
-	 position: cameraPosition,
+	 near: 10,
+	 far: 1000,
+	 position: () => cameraPosition,
 	 // rotation: cameraRotation,
 	 lookAt: zeroPos
- }
+ },
+ {
+	name: 'camera2',
+	ref: 'camera2',
+	key: 'camera2',
+	fov: 60,
+	aspect: (width/height),
+	near: 10,
+	far: 1000,
+	position: (target) => {
+		return target && relativeCameraOffset.applyMatrix4( target.matrixWorld ) || new THREE.Vector3(0,0,0)
+	},
+	lookAt: carBodies && new THREE.Vector3().copy(carBodies[0].position) || new THREE.Vector3(0,0,0)
+ },
 ])
-
 const lightPosition = new THREE.Vector3(20, 20, 20)
 const lightTarget = new THREE.Vector3(0, 0, 0)
 
@@ -116,25 +129,21 @@ const getDirectionalLights = () => ([
 	}
 ])
 
-const fog = new THREE.Fog(0x001525, 10, 40)
-
 const mapStateToProps = (state) => {
 
 	/*const viewportDivider = players && players.length === 1
     ? 1
     : (2 + Math.floor(players.length / 9));*/
 	const {innerWidth, innerHeight} = window
-
-
 	return {
 		width: innerWidth,
 		height: innerHeight,
 		viewports: getViewPorts(innerWidth, innerHeight),
-		cameras: getCameras(innerWidth, innerHeight),
-		fog: fog,
+		cameras: getCameras(innerWidth, innerHeight, state.world.carBodies),
 		directionalLights: getDirectionalLights(),
 		world: state.world.cannonWorld,
-		bodies: state.world.bodies,
+		ballBody: state.world.ballBody,
+		carBodies: state.world.carBodies,
 		groundBody: state.world.groundBody
 		//bodies: Object.keys(state.world.bodies).map((k) => state.world.bodies[k]),
 		//players: getPlayers(state),
@@ -145,6 +154,17 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onAnimate: () => {
 			dispatch(onAnimate())
+		}
+	}
+}
+
+const mergeProps = (stateProps, dispatchProps) => {
+	return {
+		...stateProps,
+		onAnimate: () => {
+
+			dispatchProps.onAnimate()
+
 		}
 	}
 }

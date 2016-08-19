@@ -7,7 +7,7 @@ class PickableMesh extends React.Component {
   static propTypes = {
     position: PropTypes.instanceOf(THREE.Vector3).isRequired,
     quaternion: PropTypes.instanceOf(THREE.Quaternion).isRequired,
-
+    killed: PropTypes.bool
   };
 
 
@@ -16,6 +16,7 @@ class PickableMesh extends React.Component {
     const {
       position,
       quaternion,
+      killed
     } = this.props;
 
     return (<mesh
@@ -24,9 +25,9 @@ class PickableMesh extends React.Component {
       ref="mesh"
       castShadow >
       <geometryResource
-        resourceId="cubeGeo" />
+        resourceId='ballGeo' />
       <materialResource
-        resourceId="cubeMaterial" />
+        resourceId='ballMaterial' />
     </mesh>)
   }
 }

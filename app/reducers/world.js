@@ -4,78 +4,68 @@ import CANNON from 'cannon'
 import Immutable from 'immutable'
 
 const mr = Math.random
-
-const N = 100
+const timeStep = 1 / 30
+const N = 10
 
 const cannonWorld = new CANNON.World()
-cannonWorld.quatNormalizeSkip = 0
-cannonWorld.quatNormalizeFast = false
+
 cannonWorld.gravity.set(0, 0, -9.82)
 cannonWorld.broadphase = new CANNON.NaiveBroadphase()
 
-const cubeShape = new CANNON.Box(new CANNON.Vec3(0.25, 0.25, 0.25))
-const playerShape = new CANNON.Box(new CANNON.Vec3(1, 0.5, 1))
-const boxShape = new CANNON.Box(new CANNON.Vec3(0.25, 0.25, 0.25))
-const bodies = []
-const density = 2515
-const mass = density * boxShape.volume()
-for (let i = 0; i < N; ++i) {
-  const boxBody = new CANNON.Body({
-    mass,
-    shape: boxShape,
-    position: new CANNON.Vec3(
-      (Math.random() - 0.5) * 2,
-      (Math.random() - 0.5) * 2,
-      (Math.random()) * 15)
-  })
-  cannonWorld.addBody(boxBody)
-  bodies.push(boxBody)
-}
-const groundBody = new CANNON.Body({
-  mass: 0,
-  shape: new CANNON.Plane(),
-  initQuaternion: new THREE.Quaternion()
-  .setFromAxisAngle(new THREE.Vector3(0, 0, 1), -Math.PI / 2)
+const carShape = new CANNON.Box(new CANNON.Vec3(2, 1.75, 1))
+
+const ballShape = new CANNON.Sphere(1)
+
+const carBodies = []
+const carBody = new CANNON.Body({
+  mass: 200,
+  shape: carShape,
+  position: new CANNON.Vec3(-10,0,10)
+})
+cannonWorld.addBody(carBody)
+carBodies.push(carBody)
+
+
+const mass = 50
+const sphereMaterial = new CANNON.Material()
+
+const ballBody = new CANNON.Body({
+  mass,
+  material: sphereMaterial,
+  shape: ballShape,
+
+  position: new CANNON.Vec3(0,0,10)
 })
 
+
+cannonWorld.addBody(ballBody)
+
+
+const groundMaterial = new CANNON.Material()
+const groundBody = new CANNON.Body({
+  mass: 0,
+  material: groundMaterial,
+  shape: new CANNON.Plane(),
+})
 cannonWorld.addBody(groundBody)
+cannonWorld.addContactMaterial(new CANNON.ContactMaterial(groundMaterial, sphereMaterial, { friction: 0.0, restitution: 0.5 }))
+
 
 const world = (state = {
   cannonWorld,
-  bodies,
+  ballBody,
+  carBodies,
   groundBody
 }, action) => {
 	switch(action.type) {
-    /*case Types.ON_ANIMATE:
-      state.cannonWorld.step(1/60)
-      return state
 
-		case Types.ADD_CUBE:
-      const cube = new CANNON.Body({
-        mass: mass,
-        shape: cubeShape,
-        position: new THREE.Vector3(-2.5 + mr() * 5, 2.5 + mr() * 5, -2.5 + mr() * 5)
+    case Types.ON_ANIMATE:
+      state.carBodies.forEach((c) => {
+        c.position.set(c.position.x + 0.05, c.position.y, c.position.z)
+
       })
-      state.cannonWorld.addBody(cube)
-      state.bodies.push({type: 'cube', id: cube.id})
+      state.cannonWorld.step(timeStep)
 
-    case Types.CTRL_ADD:
-      const player = new CANNON.Body({
-        mass: mass,
-        shape: playerShape,
-        position: new THREE.Vector3(-2.5 + mr() * 5, 2.5 + mr() * 5, -2.5 + mr() * 5)
-      })
-
-      const newState = Immutable
-        .fromJS(state)
-        .setIn(['players', action.id], { bodyId: player.id })
-        .setIn(['bodies', player.id], player)
-        .toJS()
-      newState.cannonWorld.addBody(player)
-
-
-      return newState
-*/
 		default:
 			return state
 	}

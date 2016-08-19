@@ -18,20 +18,15 @@ class PhysicsMousePick extends React.Component {
     super()
   }
 
-  componentWillMount() {
+  _move() {
+    this.props.carBodies.forEach((c) => c.velocity.set(-2,0,20))
+  }
 
+  componentWillMount() {
     document.addEventListener('keydown', (e) => {
-      this._jump()
+      this._move()
     })
   }
-
-
-  _jump() {
-    const randomBody = this.props.bodies[Math.floor(Math.random() * this.props.bodies.length)];
-    randomBody.velocity.set(0,0,10)
-  }
-
-
 
   render() {
     const {
@@ -39,66 +34,56 @@ class PhysicsMousePick extends React.Component {
       height,
       viewports,
       cameras,
-      fog,
+      onAnimate,
       directionalLights,
       world,
-      bodies,
+      ballBody,
+      carBodies,
       groundBody
     } = this.props
 
-
-
-    const cubeMeshes = bodies.map(({ position, quaternion }, i) => {
-      const pos = new THREE.Vector3().copy(position)
-      const quat = new THREE.Quaternion().copy(quaternion)
-      return (<PickableMesh
-        key={i}
-
-        position={pos}
-        quaternion={quat}
-
-        bodyIndex={i}
-
-        />)
-
-    })
 
     return (<div ref="container" >
       <React3
         antialias
         width={width}
         height={height}
-        onAnimate={() => {
-          this.props.world.step(timeStep)
-          this.props.onAnimate()
-        }}
-        clearColor={fog.color} >
+        onAnimate={onAnimate}
+        clearColor={0x001525} >
 
-        {viewports.map((vp) => <viewport {...vp} />)}
+        {viewports.map((vp, i) => <viewport key={i} {...vp} />)}
 
 
         <resources>
           <boxGeometry
-            resourceId="cubeGeo"
-            width={0.5}
-            height={0.5}
-            depth={0.5}
+            resourceId='carGeo'
+            width={4}
+            height={3.5}
+            depth={2}
 
-            widthSegments={10}
-            heightSegments={10}
+            widthSegments={1}
+            heightSegments={1}
+          />
+          <sphereGeometry
+            resourceId='ballGeo'
+            radius={1}
+            widthSegments={20}
+            heightSegments={20}
+            />
+          <meshPhongMaterial
+            resourceId="carMaterial"
+            color={0x888888}
           />
           <meshPhongMaterial
-            resourceId="cubeMaterial"
-
-            color={0x888888}
+            resourceId="ballMaterial"
+            color={0xffc34d}
           />
         </resources>
 
         <scene
           ref="scene"
-          fog={fog}
         >
-        {cameras.map((c, i) => <perspectiveCamera {...c} key={i}/>)}
+        {cameras.map((c, i) => <perspectiveCamera {...c} position={c.position(this.refs.car0)} key={i}/>)}
 
           <ambientLight color={0x666666} />
 
@@ -107,7 +92,23 @@ class PhysicsMousePick extends React.Component {
           <Ground position={new THREE.Vector3().copy(groundBody.position)}
             quaternion={new THREE.Quaternion().copy(groundBody.quaternion)}/>
 
-          {cubeMeshes}
+          <PickableMesh
+            position={new THREE.Vector3().copy(ballBody.position)}
+            quaternion={new THREE.Quaternion().copy(ballBody.quaternion)}
+            />
+
+          {carBodies.map(({position, quaternion}, i) => <mesh
+            key={i}
+            position={new THREE.Vector3().copy(position)}
+            quaternion={new THREE.Quaternion().copy(quaternion)}
+            ref={`car${i}`}
+            castShadow >
+            <geometryResource
+              resourceId='carGeo' />
+            <materialResource
+              resourceId='carMaterial' />
+          </mesh>)}
+
         </scene>
 
       </React3>
