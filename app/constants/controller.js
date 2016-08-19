@@ -14,5 +14,11 @@ export const DefaultGamepadMapping = {
 	'B': { type: 'buttons', index: 1 }
 }
 
+export const DefaultKeyboardMapping = {
+	'LEFT_X': { codes: [81, 68]},
+	'LEFT_Y': { codes: [90, 83] },
+	'A': { code: 32 },
+	'B': { code: 67 }
+} 
 
 export default ControllerConstants

@@ -20,53 +20,6 @@ class PhysicsMousePick extends React.Component {
 
   componentWillMount() {
 
-    const world = new CANNON.World()
-    world.quatNormalizeSkip = 0
-    world.quatNormalizeFast = false
-    world.gravity.set(0, 0, -9.82)
-    world.broadphase = new CANNON.NaiveBroadphase()
-
-    this.setState({
-      world
-    })
-
-
-    const boxShape = new CANNON.Box(new CANNON.Vec3(0.25, 0.25, 0.25))
-    const bodies = []
-    const density = 2515
-    const mass = density * boxShape.volume()
-
-
-    for (let i = 0; i < N; ++i) {
-      const boxBody = new CANNON.Body({
-        mass,
-        shape: boxShape,
-        position: new CANNON.Vec3(
-          (Math.random() - 0.5) * 2,
-          (Math.random() - 0.5) * 2,
-          (Math.random()) * 15)
-      })
-      world.addBody(boxBody)
-      bodies.push(boxBody)
-    }
-
-    this.setState({
-      bodies
-    })
-
-    const groundBody = new CANNON.Body({
-      mass: 0,
-      shape: new CANNON.Plane(),
-      initQuaternion: new THREE.Quaternion()
-        .setFromAxisAngle(new THREE.Vector3(0, 0, 1), -Math.PI / 2)
-    })
-
-    world.addBody(groundBody)
-
-    this.setState({
-      groundBody
-    })
-
     document.addEventListener('keydown', (e) => {
       this._jump()
     })
@@ -74,23 +27,10 @@ class PhysicsMousePick extends React.Component {
 
 
   _jump() {
-    const randomBody = this.state.bodies[Math.floor(Math.random() * this.state.bodies.length)];
-    randomBody.velocity.set(5,0,8)
+    const randomBody = this.props.bodies[Math.floor(Math.random() * this.props.bodies.length)];
+    randomBody.velocity.set(0,0,10)
   }
 
-  componentDidMount() {
-
-
-  }
-
-  componentDidUpdate() {
-
-  }
-
-  componentWillUnmount() {
-    // delete this.world
-    // delete this.stats
-  }
 
 
   render() {
@@ -100,14 +40,12 @@ class PhysicsMousePick extends React.Component {
       viewports,
       cameras,
       fog,
-      directionalLights
-    } = this.props
-
-    const {
+      directionalLights,
       world,
       bodies,
       groundBody
-    } = this.state
+    } = this.props
+
 
 
     const cubeMeshes = bodies.map(({ position, quaternion }, i) => {
@@ -131,7 +69,7 @@ class PhysicsMousePick extends React.Component {
         width={width}
         height={height}
         onAnimate={() => {
-          this.state.world.step(timeStep)
+          this.props.world.step(timeStep)
           this.props.onAnimate()
         }}
         clearColor={fog.color} >

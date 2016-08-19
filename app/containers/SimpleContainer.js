@@ -59,23 +59,23 @@ const getViewPorts = (width, height) => {
 			key: 'vp1',
 			x: 0,
 			y: 0,
-			width: ((width / 2) - 1),
-			height: height,
+			width: width,
+			height: (height / 2),
 			cameraName: 'camera1'
 		},
 		{
 			key: 'vp2',
-			x: (width / 2),
-			y: 0,
-			width: ((width / 2) - 1),
-			height: height,
+			x: 0,
+			y: (height / 2),
+			width: width,
+			height: (height / 2),
 			cameraName: 'camera1'
 		}
 	]
 }
 
-const cameraPosition = new THREE.Vector3(0, -15, 4)
-const cameraRotation = new THREE.Euler(0,0,10)
+const cameraPosition = new THREE.Vector3(0, -20, 7)
+const cameraRotation = new THREE.Euler(0,0,Math.PI / 90)
 const zeroPos = new THREE.Vector3(0, 0, Math.PI / 90, 0)
 // const cameraQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
 
@@ -132,7 +132,10 @@ const mapStateToProps = (state) => {
 		viewports: getViewPorts(innerWidth, innerHeight),
 		cameras: getCameras(innerWidth, innerHeight),
 		fog: fog,
-		directionalLights: getDirectionalLights()
+		directionalLights: getDirectionalLights(),
+		world: state.world.cannonWorld,
+		bodies: state.world.bodies,
+		groundBody: state.world.groundBody
 		//bodies: Object.keys(state.world.bodies).map((k) => state.world.bodies[k]),
 		//players: getPlayers(state),
 	}
