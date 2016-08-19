@@ -7,25 +7,19 @@ import PickableMesh from './mesh/PickableMesh'
 import Ground from './mesh/Ground'
 
 const backVector = new THREE.Vector3(0, 0, -1)
-const dragPlane = new THREE.Plane()
 
 class PhysicsMousePick extends React.Component {
 
   constructor(props, context) {
     super()
     const N = 100
-
-    this._raycaster = new THREE.Raycaster()
-
     const d = 20
 
-    this.lightPosition = new THREE.Vector3(d, d, d)
-    this.lightTarget = new THREE.Vector3(0, 0, 0)
-    this.groundQuaternion = new THREE.Quaternion()
-      .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2)
+    this.ground = {}
 
+    const world = new CANNON.World({
 
-    const world = new CANNON.World()
+    })
 
     const bodies = []
     const meshRefs = []
@@ -36,8 +30,7 @@ class PhysicsMousePick extends React.Component {
     const initCannon = () => {
       world.quatNormalizeSkip = 0
       world.quatNormalizeFast = false
-
-      world.gravity.set(0, -10, 0)
+      world.gravity.set(0, 0, -9.82)
       world.broadphase = new CANNON.NaiveBroadphase()
 
       const mass = 5
@@ -47,13 +40,13 @@ class PhysicsMousePick extends React.Component {
       for (let i = 0; i < N; ++i) {
         const boxBody = new CANNON.Body({
           mass,
+          shape: boxShape,
+          position: new CANNON.Vec3(
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5,
+            (Math.random()) * 15)
         })
 
-        boxBody.addShape(boxShape)
-        boxBody.position.set(
-          -2.5 + Math.random() * 5,
-          2.5 + Math.random() * 5,
-          -2.5 + Math.random() * 5)
         world.addBody(boxBody)
         bodies.push(boxBody)
 
@@ -66,23 +59,22 @@ class PhysicsMousePick extends React.Component {
         })
       }
 
-      const groundShape = new CANNON.Plane()
-      const groundBody = new CANNON.Body({ mass: 0 })
+      const groundBody = new CANNON.Body({
+        mass: 0,
+        shape: new CANNON.Plane(),
 
-      groundBody.addShape(groundShape)
-      groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+        initQuaternion: new THREE.Quaternion()
+          .setFromAxisAngle(new THREE.Vector3(0, 0, 1), -Math.PI / 2)
+      })
+
+      this.setState({
+        groundBody
+      })
+
+      // groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
 
       world.addBody(groundBody)
 
-      const shape = new CANNON.Sphere(0.1)
-      const jointBody = new CANNON.Body({ mass: 0 })
-      jointBody.addShape(shape)
-      jointBody.collisionFilterGroup = 0
-      jointBody.collisionFilterMask = 0
-
-      world.addBody(jointBody)
-
-      this.jointBody = jointBody
     }
 
     initCannon()
@@ -99,6 +91,7 @@ class PhysicsMousePick extends React.Component {
         quaternion: new THREE.Quaternion().copy(quaternion),
         ref: meshRefs[bodyIndex],
       }))
+
 
     this._onAnimate = () => {
       updatePhysics()
@@ -143,13 +136,15 @@ class PhysicsMousePick extends React.Component {
       height,
       viewports,
       cameras,
-      fog
+      fog,
+      directionalLights
     } = this.props
 
     const {
       clickMarkerVisible,
       clickMarkerPosition,
       meshStates,
+      groundBody
     } = this.state
 
     const d = 20
@@ -185,7 +180,6 @@ class PhysicsMousePick extends React.Component {
         <resources>
           <boxGeometry
             resourceId="cubeGeo"
-
             width={0.5}
             height={0.5}
             depth={0.5}
@@ -206,28 +200,10 @@ class PhysicsMousePick extends React.Component {
         {cameras.map((c) => <perspectiveCamera {...c} />)}
 
           <ambientLight color={0x666666} />
-          <directionalLight
-            color={0xffffff}
-            intensity={1.75}
 
-            castShadow
+          {directionalLights.map((dL) => <directionalLight {...dL} />)}
 
-            shadowMapWidth={1024}
-            shadowMapHeight={1024}
-
-            shadowCameraLeft={-d}
-            shadowCameraRight={d}
-            shadowCameraTop={d}
-            shadowCameraBottom={-d}
-
-            shadowCameraFar={3 * d}
-            shadowCameraNear={d}
-
-            position={this.lightPosition}
-            lookAt={this.lightTarget}
-          />
-
-          <Ground />
+          <Ground {...groundBody} />
 
           {cubeMeshes}
         </scene>

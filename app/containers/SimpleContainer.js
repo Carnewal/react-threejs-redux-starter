@@ -74,8 +74,9 @@ const getViewPorts = (width, height) => {
 	]
 }
 
-const cameraPosition = new THREE.Vector3(14, 3, 0)
-const zeroPos = new THREE.Vector3(0, 2, 0)
+const cameraPosition = new THREE.Vector3(0, -14, 6)
+const cameraRotation = new THREE.Euler(0,0,10)
+const zeroPos = new THREE.Vector3(0, 0, Math.PI / 90, 0)
 // const cameraQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
 
 const getCameras = (width, height) => ([
@@ -86,10 +87,33 @@ const getCameras = (width, height) => ([
 	 fov: 40,
 	 aspect: (width/height),
 	 near: 0.5,
-	 far: 10000,
+	 far: 20000,
 	 position: cameraPosition,
+	 // rotation: cameraRotation,
 	 lookAt: zeroPos
  }
+])
+
+const lightPosition = new THREE.Vector3(20, 20, 20)
+const lightTarget = new THREE.Vector3(0, 0, 0)
+
+const getDirectionalLights = () => ([
+	{
+		color: 0xffffff,
+		intensity: 1.75,
+		castShadow: true,
+		shadowMapWidth: 1024,
+		shadowMapHeight: 1024,
+		shadowCameraLeft: -20,
+		shadowCameraRight: 20,
+		shadowCameraTop: 20,
+		shadowCameraBottom: -20,
+		shadowCameraFar: 60,
+		shadowCameraNear: 20,
+
+		position: lightPosition,
+		lookAt: lightTarget
+	}
 ])
 
 const fog = new THREE.Fog(0x001525, 10, 40)
@@ -107,7 +131,8 @@ const mapStateToProps = (state) => {
 		height: innerHeight,
 		viewports: getViewPorts(innerWidth, innerHeight),
 		cameras: getCameras(innerWidth, innerHeight),
-		fog: fog
+		fog: fog,
+		directionalLights: getDirectionalLights()
 		//bodies: Object.keys(state.world.bodies).map((k) => state.world.bodies[k]),
 		//players: getPlayers(state),
 	}

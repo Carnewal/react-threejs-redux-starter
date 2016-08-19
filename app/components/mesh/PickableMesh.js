@@ -49,19 +49,13 @@ class PickableMesh extends React.Component {
     return (<mesh
       position={position}
       quaternion={quaternion}
-
       ref="mesh"
-
-      castShadow
-
-    >
+      castShadow >
       <geometryResource
-        resourceId="cubeGeo"
-      />
+        resourceId="cubeGeo" />
       <materialResource
-        resourceId="cubeMaterial"
-      />
-    </mesh>);
+        resourceId="cubeMaterial" />
+    </mesh>)
   }
 }
 

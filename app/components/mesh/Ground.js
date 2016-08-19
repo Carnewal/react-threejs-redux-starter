@@ -1,16 +1,15 @@
 import React from 'react'
 import React3 from 'react-three-renderer'
 import THREE from 'three'
-
 const quat = new THREE.Quaternion()
   .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2)
 
-const Ground = ({}) => {
+const Ground = ({position, quaternion}) => {
   return (<mesh
     castShadow
     receiveShadow
-
-    quaternion={quat}
+    position={position}
+    quaternion={quaternion}
   >
     <planeBufferGeometry
       width={100}
