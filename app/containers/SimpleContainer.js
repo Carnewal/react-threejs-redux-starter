@@ -74,7 +74,7 @@ const getViewPorts = (width, height) => {
 	]
 }
 
-const cameraPosition = new THREE.Vector3(0, -14, 6)
+const cameraPosition = new THREE.Vector3(0, -15, 4)
 const cameraRotation = new THREE.Euler(0,0,10)
 const zeroPos = new THREE.Vector3(0, 0, Math.PI / 90, 0)
 // const cameraQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
