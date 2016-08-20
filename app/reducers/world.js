@@ -17,13 +17,21 @@ const carShape = new CANNON.Box(new CANNON.Vec3(2, 1.75, 1))
 const ballShape = new CANNON.Sphere(1)
 
 const carBodies = []
-const carBody = new CANNON.Body({
+const carBody1 = new CANNON.Body({
   mass: 200,
   shape: carShape,
   position: new CANNON.Vec3(-10,0,10)
 })
-cannonWorld.addBody(carBody)
-carBodies.push(carBody)
+const carBody2 = new CANNON.Body({
+  mass: 200,
+  shape: carShape,
+  position: new CANNON.Vec3(-20,0,10)
+})
+cannonWorld.addBody(carBody1)
+cannonWorld.addBody(carBody2)
+
+carBodies.push(carBody1)
+carBodies.push(carBody2)
 
 
 const mass = 50

@@ -11,6 +11,7 @@ const timeStep = 1 / 60
 const d = 20
 const N = 100
 
+const cameraOffset = new THREE.Vector3(-40,0,40)
 
 class PhysicsMousePick extends React.Component {
 
@@ -19,7 +20,7 @@ class PhysicsMousePick extends React.Component {
   }
 
   _move() {
-    this.props.carBodies.forEach((c) => c.velocity.set(-2,0,20))
+    this.props.carBodies.forEach((c) => c.velocity.set(0,0,20))
   }
 
   componentWillMount() {
@@ -33,7 +34,6 @@ class PhysicsMousePick extends React.Component {
       width,
       height,
       viewports,
-      cameras,
       onAnimate,
       directionalLights,
       world,
@@ -83,7 +83,6 @@ class PhysicsMousePick extends React.Component {
         <scene
           ref="scene"
         >
-        {cameras.map((c, i) => <perspectiveCamera {...c} position={c.position(this.refs.car0)} key={i}/>)}
 
           <ambientLight color={0x666666} />
 
@@ -97,17 +96,26 @@ class PhysicsMousePick extends React.Component {
             quaternion={new THREE.Quaternion().copy(ballBody.quaternion)}
             />
 
-          {carBodies.map(({position, quaternion}, i) => <mesh
-            key={i}
-            position={new THREE.Vector3().copy(position)}
-            quaternion={new THREE.Quaternion().copy(quaternion)}
-            ref={`car${i}`}
-            castShadow >
-            <geometryResource
-              resourceId='carGeo' />
-            <materialResource
-              resourceId='carMaterial' />
-          </mesh>)}
+          {carBodies.map(({position, quaternion}, i) => (
+            <group>
+              <perspectiveCamera name={`camera${i}`}
+                ref={`camera${i}`}
+                key={`camera${i}`}
+                fov={40}
+                aspect={width / height}
+                near={10}
+                far={1000}
+                position={cameraOffset}
+                lookAt={new THREE.Vector3()} />
+              <mesh key={i}
+                ref={`car${i}`}
+
+                  quaternion={new THREE.Quaternion().copy(quaternion)}
+                castShadow >
+                <geometryResource resourceId='carGeo' />
+                <materialResource resourceId='carMaterial' />
+              </mesh>
+            </group>))}
 
         </scene>
 

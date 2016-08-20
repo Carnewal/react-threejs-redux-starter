@@ -60,7 +60,7 @@ const getViewPorts = (width, height) => {
 			y: 0,
 			width: width,
 			height: (height / 2),
-			cameraName: 'camera1'
+			cameraName: 'camera0'
 		},
 		{
 			key: 'vp2',
@@ -68,7 +68,7 @@ const getViewPorts = (width, height) => {
 			y: (height / 2),
 			width: width,
 			height: (height / 2),
-			cameraName: 'camera2'
+			cameraName: 'camera1'
 		}
 	]
 }
@@ -80,33 +80,6 @@ const zeroPos = new THREE.Vector3(0, 0, Math.PI / 90, 0)
 
 const relativeCameraOffset = new THREE.Vector3(5,0,10)
 
-const getCameras = (width, height, carBodies) => ([
- {
-	 name: 'camera1',
-	 ref: 'camera1',
-	 key: 'camera1',
-	 fov: 40,
-	 aspect: (width/height),
-	 near: 10,
-	 far: 1000,
-	 position: () => cameraPosition,
-	 // rotation: cameraRotation,
-	 lookAt: zeroPos
- },
- {
-	name: 'camera2',
-	ref: 'camera2',
-	key: 'camera2',
-	fov: 60,
-	aspect: (width/height),
-	near: 10,
-	far: 1000,
-	position: (target) => {
-		return target && relativeCameraOffset.applyMatrix4( target.matrixWorld ) || new THREE.Vector3(0,0,0)
-	},
-	lookAt: carBodies && new THREE.Vector3().copy(carBodies[0].position) || new THREE.Vector3(0,0,0)
- },
-])
 const lightPosition = new THREE.Vector3(20, 20, 20)
 const lightTarget = new THREE.Vector3(0, 0, 0)
 
@@ -139,7 +112,6 @@ const mapStateToProps = (state) => {
 		width: innerWidth,
 		height: innerHeight,
 		viewports: getViewPorts(innerWidth, innerHeight),
-		cameras: getCameras(innerWidth, innerHeight, state.world.carBodies),
 		directionalLights: getDirectionalLights(),
 		world: state.world.cannonWorld,
 		ballBody: state.world.ballBody,
